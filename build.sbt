@@ -38,7 +38,7 @@ val guiSettings = Seq(
     unmanagedJars in jfx <<= unmanagedJars in Compile,
     unmanagedJars in Compile += Attributed.blank(jfxJar) )
 
-val plugin = project.in(file(".")).
+val setup = project.in(file(".")).
   settings(btSettings: _*).
   settings(mySettings : _*).
   settings(guiSettings: _*)

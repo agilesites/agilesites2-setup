@@ -7,14 +7,13 @@ val jfxJar = file(System.getProperty("java.home")) / "lib" / "jfxrt.jar"
 val tomcatVersion = "7.0.52"
 
 val libDeps = Seq(
-   "org.scalafx"             %% "scalafx"        % "2.2.76-R11",
-   "org.scalafx"             %% "scalafxml-core" % "0.2.1",
+    "org.scalafx" %% "scalafx" % "2.2.76-R11",
+    "org.scalafx" %% "scalafxml-core" % "0.2.1",
     "org.apache.httpcomponents" % "httpclient" % "4.3.4",
     "javax.servlet" % "servlet-api" % "2.5",
     "org.apache.tomcat" % "tomcat-catalina" % tomcatVersion,
     "org.apache.tomcat.embed" % "tomcat-embed-core" % tomcatVersion ,
-    "org.apache.tomcat.embed" % "tomcat-embed-logging-juli" % tomcatVersion 
-   )
+    "org.apache.tomcat.embed" % "tomcat-embed-logging-juli" % tomcatVersion)
 
 val btSettings = bintrayPublishSettings ++ Seq(
 	bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("sciabarra"),
@@ -26,7 +25,6 @@ val btSettings = bintrayPublishSettings ++ Seq(
 
 val mySettings = Seq(name := "agilesites2-setup",
 	organization := "com.sciabarra",
-	sbtPlugin := true,
 	version := v,
 	scalaVersion := "2.10.4",
 	scalacOptions ++= Seq("-deprecation", "-feature"),

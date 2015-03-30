@@ -40,7 +40,7 @@ public class SitesServer {
 	public static void main(String[] args) throws Exception {
 
 		if (args.length < 2) {
-			System.out.println("usage: <port> <base> [ajpport] [host] | stop");
+			System.out.println("usage: <port> <base> [ajpport] [host] | stop <port> | status <port> ");
 			exit(0);
 		}
 
@@ -53,8 +53,12 @@ public class SitesServer {
 				System.out.println("Shutdown request accepted.");
 			} catch (Exception ex) {
 				System.out.println("Server not running.");
-
 			}
+			exit(0);
+		}
+
+		if (args.length == 2 && args[0].equals("status")) {
+			CheckPort.main(new String[] { "127.0.0.1", ""+port});
 			exit(0);
 		}
 

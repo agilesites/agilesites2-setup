@@ -106,7 +106,8 @@ public class SilentSites {
 		baseIni.setProperty("CASPortNumber", port);
 		baseIni.setProperty("CASHostNameLocal", cashost);
 		baseIni.setProperty("CSInstallDatabaseType", db);
-        baseIni.setProperty("CSInstallType", type);
+                baseIni.setProperty("CSInstallType", type);
+                baseIni.setProperty("CSInstallAccountPassword", "password");
 
         // extra configuration for agilesites installer
 		baseIni.setProperty("AsLocalHttpPort", httpLocalPort);

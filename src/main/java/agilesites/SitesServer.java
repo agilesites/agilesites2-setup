@@ -58,7 +58,7 @@ public class SitesServer {
 		}
 
 		if (args.length == 2 && args[0].equals("status")) {
-			CheckPort.main(new String[] { "127.0.0.1", ""+port});
+			CheckPort.main(new String[] { "127.0.0.1", args[1]});
 			exit(0);
 		}
 

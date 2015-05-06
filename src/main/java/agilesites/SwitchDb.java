@@ -34,9 +34,9 @@ public class SwitchDb {
 				prp.setProperty("cs.dbtype", "HSQLDB");
 			} else  if(args[1].equals("ORACLE")) {
 				prp.setProperty("cc.bigint", "NUMBER(38)");
-				prp.setProperty("cc.bigtext", "VARCHAR(2000)");
+				prp.setProperty("cc.bigtext", "CLOB");
 				prp.setProperty("cc.blob", "BLOB");
-				prp.setProperty("cc.datetime", "DATE");
+				prp.setProperty("cc.datetime", "TIMESTAMP");
 				prp.setProperty("cc.double", "NUMBER(38,10)");
 				prp.setProperty("cc.integer", "NUMBER(10)");
 				prp.setProperty("cc.maxvarcharsize", "2000");

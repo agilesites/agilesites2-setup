@@ -19,7 +19,7 @@ public class SilentSites {
 
 		if (args.length < 4) {
 			System.out
-					.println("usage: <base> <base-ini> <install-ini> <output-ini> [host][:cashost] [port][:ajpLocalPort][:httpLocalPort] [dbtype] [appserver]");
+					.println("usage: <base> <base-ini> <install-ini> <output-ini> [host][:cashost] [port][:ajpLocalPort][:httpLocalPort] [dbtype] [appserver] [shared]");
 			System.exit(0);
 		}
 
@@ -31,6 +31,7 @@ public class SilentSites {
 		String db = "HSQLDB";
 		String svr = "tomcat5";
         String type = "single";
+        String shared = null;
 
 
 		if (args.length > 4) {
@@ -74,6 +75,9 @@ public class SilentSites {
 		if (args.length > 7)
 			svr = args[7];
 
+		if(args.length > 8)  
+			shared = args[8];
+
 		System.out.println("host=" + host);
         System.out.println("cashost=" + cashost);
         System.out.println("type=" + type);
@@ -88,6 +92,8 @@ public class SilentSites {
 		File baseIniFile = new File(args[1]);
 		File installIniFile = new File(args[2]);
 		File outputIniFile = new File(args[3]);
+		File sharedFolder = new File(baseFile, "shared");
+		if(shared!=null && shared.trim().length()>0) sharedFolder = new File(shared);
 		baseIni.load(new FileReader(baseIniFile));
 		baseIni.setProperty("CSInstallDBDSN", "csDataSource");
 		baseIni.setProperty("CASHostNameActual", cashost);
@@ -96,8 +102,7 @@ public class SilentSites {
 		baseIni.setProperty("CSFTAppServerRoot",
 				fix(new File(baseFile, "home")));
 		baseIni.setProperty("sCgiPath", "/cs/");
-		baseIni.setProperty("CSInstallSharedDirectory", fix(new File(baseFile,
-				"shared")));
+		baseIni.setProperty("CSInstallSharedDirectory", fix(sharedFolder));
 		baseIni.setProperty("CSInstallWebServerAddress", host);
 		baseIni.setProperty("CSInstallWebServerPort", port);
 		baseIni.setProperty("CASPortNumberLocal", port);
@@ -106,7 +111,8 @@ public class SilentSites {
 		baseIni.setProperty("CASPortNumber", port);
 		baseIni.setProperty("CASHostNameLocal", cashost);
 		baseIni.setProperty("CSInstallDatabaseType", db);
-        baseIni.setProperty("CSInstallType", type);
+                baseIni.setProperty("CSInstallType", type);
+                baseIni.setProperty("CSInstallAccountPassword", "password");
 
         // extra configuration for agilesites installer
 		baseIni.setProperty("AsLocalHttpPort", httpLocalPort);

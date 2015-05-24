@@ -13,7 +13,6 @@ val libDeps = Seq(
   "org.hsqldb" % "hsqldb" % "1.8.0.10", // database
   "org.apache.httpcomponents" % "httpclient" % "4.3.4")
 
-/*
 val btSettings = bintrayPublishSettings ++ Seq(
 	bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("sciabarra"),
 	bintray.Keys.repository in bintray.Keys.bintray := "maven",
@@ -22,8 +21,7 @@ val btSettings = bintrayPublishSettings ++ Seq(
 	publishArtifact in packageDoc := false,
 	publishArtifact in Test := false)
 
-*/
-val publishSttings = Seq(
+/*val publishSttings = Seq(
   publishMavenStyle := true,
   pomIncludeRepository := { _ => false },
   publishTo := {
@@ -37,17 +35,18 @@ val publishSttings = Seq(
   publishArtifact in Test := false,
   licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html")),
   credentials += Credentials(Path.userHome / ".ivy2" / "credentials")
-)
+)*/
 
 val mySettings = Seq(name := "agilesites2-setup",
 	organization := "com.sciabarra",
 	version := v,
 	crossPaths := false,
+	autoScalaLibrary := false,
 	scalacOptions ++= Seq("-deprecation", "-feature"),
 	libraryDependencies ++= libDeps )
 
 val setup = project.in(file(".")).
-  settings(publishSttings: _*).
+  settings(btSettings: _*).
   settings(mySettings : _*)
 
 resolvers += Resolver.sonatypeRepo("releases")

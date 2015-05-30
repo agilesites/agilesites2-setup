@@ -8,6 +8,8 @@ import java.net.Socket;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.coyote.ajp.AjpNioProtocol;
+import org.apache.coyote.http11.Http11NioProtocol;
 
 public class SitesServer {
 
@@ -124,9 +126,37 @@ public class SitesServer {
 		tomcat.setBaseDir(base);
 		tomcat.enableNaming();
 		tomcat.setSilent(false);
-		tomcat.getHost();
+        tomcat.getHost(); // force initializaition - trick found in forums
 
-		File webapps = new File(base, "webapps");
+        // nio connector
+        final Connector nioConnector = new Connector(Http11NioProtocol.class.getName());
+        nioConnector.setPort(port);
+        nioConnector.setSecure(false);
+        nioConnector.setScheme("http");
+        nioConnector.setProtocol("HTTP/1.1");
+
+        tomcat.getService().removeConnector(tomcat.getConnector());
+        tomcat.getService().addConnector(nioConnector);
+        tomcat.setConnector(nioConnector);
+
+        /// set max threads and connections
+        // was
+        //setPropertyIfExistEnv("maxThreads", tomcat.getConnector());
+        //setPropertyIfExistEnv("maxConnections", tomcat.getConnector());
+        setPropertyIfExistEnv("maxThreads", nioConnector);
+        setPropertyIfExistEnv("maxConnections",nioConnector);
+
+        // ajp connector
+        if (ajpport != -1) {
+            Connector c = new Connector(AjpNioProtocol.class.getName() /*was "AJP/1.3"*/);
+            c.setPort(ajpport);
+            setPropertyIfExistEnv("maxThreads", c);
+            setPropertyIfExistEnv("maxConnections", c);
+            tomcat.getService().addConnector(c);
+        }
+
+        // webapps
+        File webapps = new File(base, "webapps");
 		proxyHost = hostname;
 		proxyPort = port;
 
@@ -142,7 +172,7 @@ public class SitesServer {
 				continue;
 			String ctx = filepath.getName();
 			if (ctx.equals("ROOT"))
-				ctx = "/";
+				ctx = "";
 			else if (!ctx.startsWith("/") && !ctx.equals(""))
 				ctx = "/" + ctx;
 			System.out.println(ctx + " -> " + filepath);
@@ -181,12 +211,18 @@ public class SitesServer {
 			}
 		}.start();
 
-		if (ajpport != -1) {
-			Connector c = new Connector("AJP/1.3");
-			c.setPort(ajpport);
-			tomcat.getService().addConnector(c);
-		}
+        // go!
 		tomcat.start();
 		tomcat.getServer().await();
 	}
+
+    private static void setPropertyIfExistEnv(String property, Connector c) {
+        if(c!=null) {
+            String value = System.getenv("TOMCAT_"+property.toUpperCase());
+            if(value!=null) {
+                System.out.println(c.getProtocolHandlerClassName()+"."+property+"="+value);
+                c.setProperty(property, value);
+            }
+        }
+    }
 }

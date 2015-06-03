@@ -129,26 +129,26 @@ public class SitesServer {
         tomcat.getHost(); // force initializaition - trick found in forums
 
         // nio connector
-        final Connector nioConnector = new Connector(Http11NioProtocol.class.getName());
-        nioConnector.setPort(port);
-        nioConnector.setSecure(false);
-        nioConnector.setScheme("http");
-        nioConnector.setProtocol("HTTP/1.1");
+        //final Connector nioConnector = new Connector(Http11NioProtocol.class.getName());
+        //nioConnector.setPort(port);
+        //nioConnector.setSecure(false);
+        //nioConnector.setScheme("http");
+        //nioConnector.setProtocol("HTTP/1.1");
 
-        tomcat.getService().removeConnector(tomcat.getConnector());
-        tomcat.getService().addConnector(nioConnector);
-        tomcat.setConnector(nioConnector);
+        //tomcat.getService().removeConnector(tomcat.getConnector());
+        //tomcat.getService().addConnector(nioConnector);
+        //tomcat.setConnector(nioConnector);
+        //setPropertyIfExistEnv("maxThreads", nioConnector);
+        //setPropertyIfExistEnv("maxConnections",nioConnector);
 
         /// set max threads and connections
         // was
-        //setPropertyIfExistEnv("maxThreads", tomcat.getConnector());
-        //setPropertyIfExistEnv("maxConnections", tomcat.getConnector());
-        setPropertyIfExistEnv("maxThreads", nioConnector);
-        setPropertyIfExistEnv("maxConnections",nioConnector);
+        setPropertyIfExistEnv("maxThreads", tomcat.getConnector());
+        setPropertyIfExistEnv("maxConnections", tomcat.getConnector());
 
         // ajp connector
         if (ajpport != -1) {
-            Connector c = new Connector(AjpNioProtocol.class.getName() /*was "AJP/1.3"*/);
+            Connector c = new Connector(/*AjpNioProtocol.class.getName()*/ "AJP/1.3");
             c.setPort(ajpport);
             setPropertyIfExistEnv("maxThreads", c);
             setPropertyIfExistEnv("maxConnections", c);
